@@ -2,10 +2,8 @@
 clc;clear;close all;
 
 % input arguement
-pathTr = [pwd,'/USPS_train.txt'];
-pathTe = [pwd,'/USPS_test.txt'];
-% pathTr = '../DataSets/USPS_train.txt';
-% pathTe = '../DataSets/USPS_test.txt';
+pathTr = '../DataSets/USPS_train.txt';
+pathTe = '../DataSets/USPS_test.txt';
 K = 1:2:20;	% k-nearest neighbor
 
 [dTr,dTe] = deal(load(pathTr),load(pathTe));
