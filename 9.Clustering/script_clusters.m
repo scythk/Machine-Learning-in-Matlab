@@ -6,7 +6,7 @@ clc;clear;close all;
 % pathTe = [pwd,'/USPS_test.txt'];
 pathTr = '../DataSets/USPS_train.txt';
 pathTe = '../DataSets/USPS_test.txt';
-K = 1:2:20;	% k-nearest neighbor
+ITER = 300;
 
 [dTr,dTe] = deal(load(pathTr),load(pathTe));
 [x,y] = deal(dTr(:,1:end-1),dTr(:,end));
@@ -37,5 +37,5 @@ figure
 plot(K,accEucl,'ro-');hold on;
 plot(K,accManh,'b*-');hold on;
 grid on;
-xlabel('K-Nearest-Neighbor');ylabel('Testing accuracy');
+xlabel('K-Nearest-Neighbor');ylabel('Clustering accuracy');
 legend('Euclidean','Manhattan');
