@@ -4,7 +4,7 @@ clc;clear;close all;
 % input arguement
 % pathTr = [pwd,'/USPS_train.txt'];
 pathTr = '../DataSets/USPS_train.txt';
-ITER = 100;
+ITER = 70;
 
 dTr = load(pathTr);
 [X,y] = deal(dTr(:,1:end-1),dTr(:,end));
@@ -21,15 +21,20 @@ Sigma = Xbar*Xbar'/dLen;
 save('sigma.mat','V','D');
 
 %% Clustering
-% load('sigma.mat');
+load('sigma.mat');
 acc = zeros(Dim-1,ITER);
 
 % Assign random class to data
 yRand = randi([0 9],dLen,1);
 
 % testing for different # of principal components
-for p = 1:Dim-1
-    xPCA = V(:,end-p+1:end);
+for p = 1:Dim
+    if p==Dim
+        xPCA = Xbar;
+    else
+        xPCA = V(:,end-p+1:end);
+    end
+    
     yEst = yRand;
     meanCls = zeros(nCls,size(xPCA,2));
     for iter = 1:ITER
@@ -58,17 +63,17 @@ for p = 1:Dim-1
     end
 end
 
-%% plot
+%% Plot
 legendStr = cell(Dim-1,1);
 figure
-for p = 1:Dim-1
+for p = 1:Dim
     plot(1:ITER,acc(p,:),'LineWidth',2);hold on;
     legendStr{p} = [num2str(p),' components'];
 end
 grid on;
 title('Clustering accuracy vs iteration');
 xlabel('iteration');ylabel('Clustering accuracy');
-legend(legendStr);
+legend(legendStr,'No dim reduction');
 % saveas(gcf,'AccVsIter.png');
 
 figure
