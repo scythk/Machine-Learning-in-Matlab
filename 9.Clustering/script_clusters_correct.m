@@ -16,12 +16,12 @@ Xbar = (X-mean(X))./std(X);
 
 
 %% PCA
-Sigma = Xbar*Xbar'/dLen;
+Sigma = Xbar'*Xbar/dLen;
 [V,D] = eig(Sigma);
-save('sigma.mat','V','D');
+save('sigma1.mat','V','D');
 
 %% Clustering
-load('sigma.mat');
+load('sigma1.mat');
 acc = zeros(Dim-1,ITER);
 
 % Assign random class to data
@@ -32,7 +32,7 @@ for p = 1:Dim
     if p==Dim
         xPCA = Xbar;
     else
-        xPCA = V(:,end-p+1:end);
+        xPCA = Xbar*V(:,end-p+1:end);   % compressed data
     end
     
     yEst = yRand;
@@ -68,7 +68,7 @@ legendStr = cell(Dim-1,1);
 figure
 for p = Dim:-1:1
     plot(1:ITER,acc(p,:),'LineWidth',2);hold on;
-    legendStr{p} = [num2str(p),' components'];
+    legendStr{Dim-p+1} = [num2str(p),' components'];
 end
 grid on;
 title('Clustering accuracy vs iteration');
@@ -77,7 +77,7 @@ legend(legendStr);
 % saveas(gcf,'AccVsIter.png');
 
 figure
-plot(1:Dim-1,acc(:,end),'ro-');hold on;grid on;
+plot(1:Dim,acc(:,end),'ro-');hold on;grid on;
 title('Clustering accuracy vs # of components');
 xlabel('# of components');ylabel('Clustering accuracy');
 % saveas(gcf,'AccVsComp.png');
